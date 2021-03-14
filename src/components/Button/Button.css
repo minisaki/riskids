@@ -1,0 +1,39 @@
+.btn {  
+  outline: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.btn.btn-primary {  
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn.btn-primary:hover {
+  background-color: #46aaf2;
+}
+
+.btn.btn-medium {
+  width: 100px;
+  height: 37px;  
+  font-size: 1.6rem;
+}
+
+.btn.btn-large {
+  min-width: 150px;
+  height: 38px;  
+  font-size: 2rem;
+}
+.btn.btn-disabled {
+  background-color: rgba(207, 206, 206, 0.5);
+  color: #9da3a7;
+  cursor: not-allowed;
+  
+}
+.btn.btn-disabled:hover {
+  background-color: rgba(207, 206, 206, 0.5);
+  color: #9da3a7;
+  cursor: not-allowed;
+}

@@ -1,0 +1,24 @@
+.container__title {
+  border-bottom: 1px solid var(--border-color);
+  margin: 40px 0 20px 0px;
+}
+.container__title-wrapper {
+  width: 30%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #ec2154;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.container__icon {
+  font-size: 2rem;
+  color: var(--white-color);
+  margin-left: 12px;
+}
+.container__text {
+  color: var(--white-color);
+  margin: 8px 12px;
+  font-weight: 400;
+}
+

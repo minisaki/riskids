@@ -49,7 +49,7 @@ function Nabar() {
   const [auth, setAuth] = useState(false);
   const [cartClick, setCartClick] = useState(false);
   const [clikedBar, setClickedBar] = useState(false);
-  const [cart, setCart] = useState(true);
+  // const [cart, setCart] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);  
 
   const handleClick = (event) => {
@@ -81,6 +81,9 @@ function Nabar() {
   // check user login yet
   const loginUser = useSelector((state) => state.user.current);
   const isLogin = !!loginUser.id;
+
+  const cart = useSelector((state) => state.cartItem.current);
+  const isCart = !!cart.id
 
   const barClose = (evt) => {
     setClickedBar(evt);
@@ -172,7 +175,7 @@ function Nabar() {
 
               <div
                 className={
-                  cart
+                  isCart
                     ? 'Nabar-header__list-cart Nabar-header__list-cart--active'
                     : 'Nabar-header__list-cart'
                 }

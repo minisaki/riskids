@@ -1,0 +1,14 @@
+.filter-price-title {
+    font-size: 1.6rem;
+    font-weight: 300;
+    padding: 8px 10px;
+    color: var(--text-color);
+    margin: 0;
+}
+.input-midd {
+    padding: 14px;
+    font-size: 3rem;
+} 
+/* .input > div > input {
+    font-size: 2rem;
+} */

@@ -17,6 +17,10 @@ import Category from './components/page/home/caregories/Category';
 import ProductSkeletonList from './components/page/home/ProductSkeletonList';
 import Homepage from './components/page/home/Homepage';
 import index from './components/page/home/products';
+// import ProductPage from './components/page/home/ProductPage/ProductPage.js';
+import ProductSingle from './components/page/home/ProductPage';
+import Index from './components/page/home/ProductPage';
+import MyGallery from './components/page/home/image-gallery'
 
 function App() {
   useEffect(() => {
@@ -43,16 +47,18 @@ function App() {
             
           >
             <Suspense fallback={<div>Loading...</div>}>
+            {/* <Route path="/" component={Index} /> */}
               <Nabar />
+              
               <Switch>              
                 <Route path="/" component={Home} />
                 {/* <Route path="/products" component={Home} /> */}
-                <Route exact path="/ProductSkeletonList" component={ProductSkeletonList} />
+                {/* <Route exact path="/ProductSkeletonList" component={ProductSkeletonList} /> */}
                 
 
-                <Route exact path="/testZoom" component={ImageZoomTest} />
+                {/* <Route exact path="/testZoom" component={ImageZoomTest} /> */}
                 {/* <Route exact path="/owl" component={owlCarousel} /> */}
-                <Route exact path="/counterIndex" component={CounterIndex} />
+                {/* <Route exact path="/counterIndex" component={CounterIndex} /> */}
               </Switch>
               <Footer />
             </Suspense>

@@ -6,14 +6,16 @@ import Category from './caregories/Category';
 import Product from './products/Product';
 import Homepage from './Homepage';
 import index from './products';
+import Index from './ProductPage';
+
 
 function Home() {
   const match = useRouteMatch()
   return (          
         <Switch>
           <Route path={match.path} exact component={Homepage}/>
-          <Route path={`${match.path}categories`} exact component={Category }/>
-          <Route path={`${match.path}product/:id`} component={index}/>          
+          <Route path={`${match.path}categories`} component={Category }/>
+          <Route path={`${match.path}product/:id`} component={Index}/>          
         </Switch>
   );
 }

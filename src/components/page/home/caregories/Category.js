@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Card from '../card/Card';
-import './Category.css';
-import { Paper, Tabs, Tab, makeStyles } from '@material-ui/core';
-import Pagination from '@material-ui/lab/Pagination';
+import { makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import productApi from '../../../../api/productApi';
-import ProductSkeletonList from '../ProductSkeletonList';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import CardItems from '../cardItem/CardItems';
+import Pagination from '@material-ui/lab/Pagination';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+import productApi from '../../../../api/productApi';
+import Card from '../card/Card';
+import ProductFilter from '../productFilter/ProductFilter';
+import ProductSkeletonList from '../ProductSkeletonList';
+import './Category.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 2,
     boxShadow: 'none',
     borderBottom: '1px solid #e4dddd',
   },
@@ -46,28 +43,38 @@ const useStyles = makeStyles((theme) => ({
 function Category(props) {
   const classes = useStyles();
 
-  const [valueSort, setValueSort] = useState(0);
+  let location = useLocation();
+  let nameCategoryLocation = location.state;
+  
+
+  const [valueSort, setValueSort] = useState(1);
   const [productList, setProductList] = useState([]);
   const [pagination, setPagination] = useState({
     limit: 9,
     total: 10,
     page: 1,
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);  
+    
   const [filters, setFilters] = useState({
     _page: 1,
-    _limit: 20,
+    _limit: 20,    
+    'category.id': nameCategoryLocation?.id || 0,
   });
-
-  let location = useLocation();
-  let nameCategory = location.state
+  // if (nameCategoryLocation.id) {
+  //   setFilters((prevFilters) => ({
+  //     ...prevFilters,
+  //     'category.id' : nameCategoryLocation.id
+  //   }))
+  // }
+  const [nameCategory, setNameCategory] = useState(nameCategoryLocation?.name || "Thời trang");
 
   const settingSlier = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 3,    
+    slidesToScroll: 3,
     autoplay: true,
     autoplaySpeed: 2000,
     pauseOnHover: true,
@@ -78,32 +85,66 @@ function Category(props) {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          initialSlide: 2
-        }
+          initialSlide: 2,
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
-  
-  
+
   const handleChangeTab = (event, newValue) => {
-    setValueSort(newValue);
+    switch (newValue) {
+      case 0:
+        setFilters({_page: 1,
+          _limit: 20,})
+        setNameCategory("Tất cả")
+        setValueSort(newValue)
+        break;
+      case 1:
+        // code block
+        break;
+      case 2:
+      // code block
+      break;
+      case 3:
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          _sort: 'salePrice:ASC'
+        }))
+        setValueSort(newValue)
+
+      break;
+      case 4:
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          _sort: 'salePrice:DESC'
+        }))
+        setValueSort(newValue)
+        
+      break;
+      default:
+        setFilters({
+          _page: 1,
+          _limit: 20,
+        })
+    }
   };
-  console.log(valueSort);
+  
+
   const handleClick = (event) => {
     event.preventDefault();
   };
@@ -114,14 +155,40 @@ function Category(props) {
       _page: page,
     }));
   };
+
+  const HandleClickCategory = (categoryId, name) => {
+    // console.log(categoryId, name)
+    setFilters(() => ({    
+      _limit: 20,
+      _page: 1,
+      ...categoryId,
+    }));
+    setNameCategory(name);
+    setValueSort(1)
+  };
+
+  const handleClickSortPrice = (newFilters) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,      
+      _sort: "salePrice:ASC",
+    }));
+    setValueSort(3)
+  };
+  const HandleClickService = (newFilters) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters, })
+    )}
+  console.log(filters);
   useEffect(() => {
     (async () => {
       try {
         const { data, pagination } = await productApi.getAll(filters);
         setProductList(data);
-        
+
         setPagination(pagination);
-        console.log({ data, pagination });
+        
       } catch (error) {
         console.log('Failed to fetch product list: ', error);
       }
@@ -130,8 +197,7 @@ function Category(props) {
     })();
   }, [filters]);
 
-  const productCategory = productList.filter((product) => product.category.name === nameCategory.text)
-  console.log(productCategory)
+  
   return (
     <div className="container">
       <div className="grid wide">
@@ -140,27 +206,23 @@ function Category(props) {
           aria-label="breadcrumb"
           className={classes.breadcrumb}
         >
-          <Link color="inherit" href="/" onClick={handleClick}>
-            Material-UI
+          <Link color="inherit" to="/" onClick={handleClick}>
+            Trang chủ
           </Link>
           <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
-            Core
+            {valueSort === 0 && !filters['category.id'] ? "Tất cả" : nameCategory}
           </Link>
-          <Typography color="textPrimary">Breadcrumb</Typography>
+         
         </Breadcrumbs>
         <div className="row product-container__wrapper">
           <div className="col l-3 silebar">
-            <div className="aside">
-              <div className="aside-wrapper">
-                <h3 className="aside-title">NÊN MUA HÀNG TẠI BABI</h3>
-                <ul className="aside-list">
-                  <li className="aside-item">Lịch sử Uy tín trên 10 năm</li>
-                  <li className="aside-item">Cam kết hàng Chất lượng Tốt</li>
-                  <li className="aside-item">Đảm bảo Hàng như Hình</li>
-                  <li className="aside-item">Không vừa được đổi size</li>
-                  <li className="aside-item">Giao hàng Toàn quốc</li>
-                </ul>
-              </div>
+            <div className="category_aside">              
+              <ProductFilter
+                onChange={HandleClickCategory}
+                onChangeService={HandleClickService}
+                onClickByFilterPrice={handleClickSortPrice}
+                filters={filters}
+              />
             </div>
           </div>
           <div className="col l-9 m-12 c-12 product-container__list">
@@ -170,18 +232,24 @@ function Category(props) {
                 onChange={handleChangeTab}
                 indicatorColor="primary"
                 textColor="primary"
+                scrollButtons="off"
               >
-                <Tab label="Phổ Biến" className={classes.label} />
+                <Tab label="Tất cả" className={classes.label} />
                 <Tab label="Bán Chạy" className={classes.label} />
                 <Tab label="Hàng Mới" className={classes.label} />
                 <Tab label="Giá Thấp" className={classes.label} />
-                <Tab label="Giá Cao" className={classes.label} />
+                <Tab label="Giá Cao" className={classes.label} />                  
+                
+          
               </Tabs>
             </Paper>
             {loading ? (
               <ProductSkeletonList length={9} />
             ) : (
-              <Card text={nameCategory.text} data={productCategory} sort={valueSort} />
+              <Card 
+                CategoryName={valueSort === 0 && !filters['category.id'] ? "Tất cả" : nameCategory} 
+                data={productList}
+                />
             )}
 
             <div className={classes.panigation}>

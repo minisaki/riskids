@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Card from '../card/Card';
 import { Link } from 'react-router-dom';
 import productApi from '../../../../api/productApi';
-import ProductSkeletonList from '../ProductSkeletonList';
 import categoryApi from '../../../../api/categoryApi';
+import ProductSkeletonList from '../ProductSkeletonList';
 
 function Homepage(props) {
 
@@ -33,7 +33,12 @@ function Homepage(props) {
         {loading && <ProductSkeletonList length={9} />}
             
          { !loading && categories.map((category, index) => {          
-            return   <Card key={index} text={category.name} data = {category.products.filter((product,index) => {return index < 8})}/>
+            return   <Card 
+                        key={index} 
+                        CategoryName={category.name} 
+                        data = {category.products.filter((product,index) => {return index < 8})}
+                        CategoryId={category.id}
+                        />
                     
         })})
      

@@ -82,8 +82,8 @@ function Nabar() {
   const loginUser = useSelector((state) => state.user.current);
   const isLogin = !!loginUser.id;
 
-  const cart = useSelector((state) => state.cartItem.current);
-  const isCart = !!cart.id
+  const carts = useSelector((state) => state.cartItem.current);
+  const isCart = carts.length > 0
 
   const barClose = (evt) => {
     setClickedBar(evt);
@@ -188,7 +188,7 @@ function Nabar() {
                 )}
                 <span className="hidden-on-mobile-table">Gio hang</span>
               </div>
-              {cartClick ? <Cart cart={cart} /> : null}
+              {cartClick ? <Cart carts={carts} /> : null}
             </div>
             {closeForm ? <Modal /> : null}
           </div>

@@ -20,6 +20,7 @@
 }
 .cart-item__detail {
   display: flex;
+  position: relative;
 }
 
 .cart-item__img {
@@ -53,8 +54,14 @@
   -webkit-line-clamp: 2;
   
 }
+.cart-item__content {
+  padding-right: 16px;
+}
 .cart-item__close {
-  /* width: 20px; */
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-left: 10px;
 }
 .icon-close-cart__product {
   display: none;

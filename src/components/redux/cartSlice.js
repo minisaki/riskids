@@ -1,13 +1,13 @@
 import { createSlice} from '@reduxjs/toolkit';
 
 const data = JSON.parse(localStorage.getItem('CART'))
-console.log(data)
+
 
 const CartSlice = createSlice({
     name: 'cart-item',
     initialState: {
         current: data ? data : [],
-        settings: {},
+        message: '',
       },
     reducers : {
         addCartItem(state, action) {
@@ -29,11 +29,53 @@ const CartSlice = createSlice({
             return state;
             
         },
-        
+        increaseCartQuantity(state, action) {
+            
+            let check = state.current.findIndex((element) => element.id === action.payload) 
+            
+            state.current[check].quantity += 1
+            state.message = 'Tăng số lượng thành công'
+            localStorage.setItem('CART', JSON.stringify(state.current))
+            return state;
+            
+        },
+        decreaseCartQuantity(state, action) {
+            let check = state.current.findIndex((element) => element.id === action.payload) 
+            if (state.current[check].quantity > 1){
+                state.current[check].quantity -= 1
+                state.message = 'Giảm số lượng thành công'
+            } else {
+                state.message = 'Bạn không thể giảm hơn mức tối thiểu'
+            }
+            
+            localStorage.setItem('CART', JSON.stringify(state.current))
+            return state;
+        },
+        removeCartItem(state, action) {
+            let check = state.current.findIndex((element) => element.id === action.payload)
+            if (check !== -1) {
+                state.current.splice(check,1)
+            }
+            
+            localStorage.setItem('CART', JSON.stringify(state.current))
+            return state;
+        },
+        editQuantityCartItem(state, action) {
+            let check = state.current.findIndex((element) => element.id === action.payload.id)
+            let quantity = parseInt(action.payload.quantity)
+            if (quantity > 0) {
+                state.current[check].quantity = quantity
+            } else {
+                state.current[check].quantity = 0
+            }
+            
+            localStorage.setItem('CART', JSON.stringify(state.current))
+            return state;
+        }
     }
 })
 const {actions, reducer} = CartSlice;
 // console.log(action)
-export const {addCartItem} = actions;
+export const {addCartItem, increaseCartQuantity, decreaseCartQuantity, removeCartItem, editQuantityCartItem} = actions;
 export default reducer;
 

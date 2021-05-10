@@ -5,28 +5,12 @@ import { Link } from 'react-router-dom';
 import productApi from '../../../../api/productApi';
 import categoryApi from '../../../../api/categoryApi';
 import ProductSkeletonList from '../ProductSkeletonList';
+import {useSelector} from 'react-redux';
 
 function Homepage(props) {
-
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
   
-  useEffect(() => {
-    (async () => {
-      try {
-        const data  = await categoryApi.getAll();
-        setCategories(data);
-        
-        
-        setLoading(false)
-      } catch (error) {
-        console.log('Failed to fetch product list: ', error);
-      }
-    })();
-  }, []);
-
-  
-    
+  const categories = useSelector((state) => state.categories.current)
+  const  loading = useSelector((state) => state.categories.loading)
   return (
     <div className="container">
       <div className="grid wide">
@@ -35,7 +19,7 @@ function Homepage(props) {
          { !loading && categories.map((category, index) => {          
             return   <Card 
                         key={index} 
-                        CategoryName={category.name} 
+                        CategoryName={category.title} 
                         data = {category.products.filter((product,index) => {return index < 8})}
                         CategoryId={category.id}
                         />

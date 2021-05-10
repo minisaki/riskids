@@ -136,7 +136,7 @@
   position: relative;
 }
 .Nabar-header__list-cart--active::before {
-  content: "1";
+  content: attr(quantity);
   width: 24px;
   height: 24px;
   top: -7px;

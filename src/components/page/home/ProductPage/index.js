@@ -14,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
-import Accordionn from './Accordionn';
+import AccordionCustom from './AccordionCustom';
 import Button from './Button';
 import "react-image-gallery/styles/css/image-gallery.css";
 import productStyle from './productStyle.js';
@@ -26,6 +26,8 @@ import productApi from '../../../../api/productApi';
 import { STATIC_HOST, THUMBNAIL_PLACEHOLDER } from '../../../../constants/conmon';
 import { useDispatch } from 'react-redux';
 import { addCartItem } from '../../../redux/cartSlice';
+import { useSnackbar } from 'notistack';
+import DOMPurify from 'dompurify';
 
 
 const useStyles = makeStyles(productStyle);
@@ -34,6 +36,7 @@ function Index(props) {
   const [colorSelect, setColorSelect] = useState('0');
   const [sizeSelect, setSizeSelect] = useState('0');
   const { id } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [filters, setFilters] = useState(id ? { id: id } : {});
   const [product, setProduct] = useState({});
@@ -48,7 +51,7 @@ function Index(props) {
   console.log(filters);
 
   const dispatch = useDispatch()
-
+  const safeDescription = DOMPurify.sanitize(product.description);
 
   useEffect(() => {
       (async () => {
@@ -74,11 +77,11 @@ function Index(props) {
     }
     const action = addCartItem(cartItem)
     dispatch(action)
+    enqueueSnackbar('Thêm giỏi hàng thành công', {variant: 'success',})
   }
 
   return (
-    <div className={classes.productPage}>
-      
+    <div className={classes.productPage}>      
       <div className={classNames(classes.section, classes.sectionGray)}>
         <div className={classes.container}>
           <div className={classNames(classes.main, classes.mainRaised)}>
@@ -115,7 +118,7 @@ function Index(props) {
               <GridItem md={6} sm={6}>
                 <h2 className={classes.title}>{product.name}</h2>
                 <h3 className={classes.mainPrice}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.salePrice)}</h3>
-                <Accordionn
+                <AccordionCustom
                   active={0}
                   activeColor="rose"
                   collapses={[
@@ -131,7 +134,7 @@ function Index(props) {
                       title: 'Thông tin thiết kế',
                       content: (
                         <p>
-                          {product.description}
+                          <div dangerouslySetInnerHTML={{ __html: safeDescription }} />
                         </p>
                       ),
                     },

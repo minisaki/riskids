@@ -3,7 +3,7 @@ import axiosClient from "./axiosClient";
 
 const categoryApi = {
     async getAll() {
-        const url =  `/categories`;
+        const url =  `/categories/`;
         return await axiosClient.get(url);
     },
     get(id) {

@@ -13,7 +13,6 @@ import {
 import tooltipsStyle from './tooltipsStyle';
 import imagesStyles from './imagesStyles';
 import customSelectStyle from './customSelectStyle';
-import { NonceProvider } from 'react-select';
 
 
 

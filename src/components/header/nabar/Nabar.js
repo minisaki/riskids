@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     }
   }
 });
-function Nabar() {
+function Nabar(props) {
   const [showResult, setShowResult] = useState(false);
   const [productSearch, setProductSearch] = useState(false);
   const [auth, setAuth] = useState(false);
@@ -178,8 +178,10 @@ function Nabar() {
                   isCart
                     ? 'Nabar-header__list-cart Nabar-header__list-cart--active'
                     : 'Nabar-header__list-cart'
+                  
                 }
                 onClick={() => setCartClick(!cartClick)}
+                quantity={carts.length}
               >
                 {cartClick ? (
                   <i className="far fa-times-circle icon-close-cart"></i>
@@ -260,6 +262,7 @@ function Nabar() {
         click={clikedBar}
         barClose={barClose}
         clickedAuthMobile={clickedAuthMobile}
+        
       />
     </div>
   );

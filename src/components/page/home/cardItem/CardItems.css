@@ -60,12 +60,22 @@
   color: #ff3000;
   text-align: center;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .card-item__promotion-percent {
   height: 30px;
   font-size: 1.4rem;
   color: var(--text-color);
+  margin-left: -60px;
+  width: 30px;
+  text-decoration: line-through;
+}
+.icon-eye{
+  height: 30px;
+  font-size: 1.4rem;
+  color: var(--text-color);
   margin-left: 20px;
   width: 30px;
-  
 }

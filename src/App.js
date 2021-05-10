@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Nabar from './components/header/nabar/Nabar';
 import Home from './components/page/home/Home';
@@ -21,19 +21,36 @@ import index from './components/page/home/products';
 import ProductSingle from './components/page/home/ProductPage';
 import Index from './components/page/home/ProductPage';
 import MyGallery from './components/page/home/image-gallery'
+import categoryApi from './api/categoryApi';
 
 function App() {
-  useEffect(() => {
-    const fetcProducts = async () => {
-      const params = {
-        _limit: 10,
-      };
-      const productList = await productApi.getAll(params);
-      // console.log(productList)
-    };
+  // useEffect(() => {
+  //   const fetcProducts = async () => {
+  //     const params = {
+  //       _limit: 10,
+  //     };
+  //     const productList = await productApi.getAll(params);
+  //     // console.log(productList)
+  //   };
 
-    // fetcProducts();
-  }, []);
+  //   // fetcProducts();
+  // }, []);
+
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const data  = await categoryApi.getAll();
+  //       setCategories(data);
+  //       setLoading(false)
+  //     } catch (error) {
+  //       console.log('Failed to fetch product list: ', error);
+  //     }
+  //   })();
+  // }, []);
+
   
   return (
     <div className="App">
@@ -49,9 +66,9 @@ function App() {
             <Suspense fallback={<div>Loading...</div>}>
             {/* <Route path="/" component={Index} /> */}
               <Nabar />
-              
-              <Switch>              
-                <Route path="/" component={Home} />
+              <Home />
+              {/* <Switch>              
+                <Route path="/" component={Home} /> */}
                 {/* <Route path="/products" component={Home} /> */}
                 {/* <Route exact path="/ProductSkeletonList" component={ProductSkeletonList} /> */}
                 
@@ -59,7 +76,7 @@ function App() {
                 {/* <Route exact path="/testZoom" component={ImageZoomTest} /> */}
                 {/* <Route exact path="/owl" component={owlCarousel} /> */}
                 {/* <Route exact path="/counterIndex" component={CounterIndex} /> */}
-              </Switch>
+              {/* </Switch> */}
               <Footer />
             </Suspense>
           </SnackbarProvider>

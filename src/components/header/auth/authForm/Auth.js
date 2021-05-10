@@ -49,7 +49,6 @@ function Auth(props) {
         const instantData = {}
         instantData.identifier = data.textEmail
         instantData.password = data.textPassword
-        console.log(instantData)
         try {            
             const action = login(instantData)
             const resultAction = await dispatch(action)

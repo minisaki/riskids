@@ -7,11 +7,11 @@ import FilterByService from './filters/FilterByService';
 function ProductFilter(props) {
   const onChange = (categories) => {
     if (props.onChange) {
-      const newFilters = {
-        'category.id': categories.id,
-      };
+      // const newFilters = {
+      //   'category.id': categories.id,
+      // };
       const CategoryName = categories.name;
-      props.onChange(newFilters, CategoryName);
+      props.onChange(categories.id, CategoryName);
     }
   };
   const HandleSubmit = (newFilters) => {
@@ -25,7 +25,7 @@ function ProductFilter(props) {
     props.onChangeService(services)
   };
   return (
-    <div className="category_aside-wrapper">
+    <div className="category_aside-wrapper">      
       <FilterByCategory onChange={onChange} />
       <FilterByPrice onClickByFilterPrice={HandleSubmit} />
       <FilterByService filters={props.filters} onChangeService={onChangeService} />

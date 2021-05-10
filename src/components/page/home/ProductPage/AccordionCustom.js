@@ -14,7 +14,7 @@ import styles from "./accordionStyle.js";
 
 const useStyles = makeStyles(styles);
 
-export default function Accordionn(props) {
+export default function AccordionCustom(props) {
   const [active, setActive] = React.useState(
     props.active.length === undefined ? [props.active] : props.active
   );
@@ -80,12 +80,12 @@ export default function Accordionn(props) {
   );
 }
 
-Accordionn.defaultProps = {
+AccordionCustom.defaultProps = {
   active: -1,
   activeColor: "primary",
 };
 
-Accordionn.propTypes = {
+AccordionCustom.propTypes = {
   // index of the default active collapse
   active: PropTypes.oneOfType([
     PropTypes.number,

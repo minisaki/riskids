@@ -15,7 +15,7 @@ import Card from './Card/Card.js';
 import CardBody from './Card/CardBody.js';
 import { useSelector, useDispatch } from 'react-redux';
 import shoppingCartStyle from './shoppingCartStyle.js';
-import { STATIC_HOST, THUMBNAIL_PLACEHOLDER } from '../../../../constants/conmon.js';
+import { STATIC_HOST, THUMBNAIL_PLACEHOLDER, STATIC_HOST_LOCAL } from '../../../../constants/conmon.js';
 import { ButtonGroup, Button, TextField, Input } from '@material-ui/core';
 import {
   increaseCartQuantity,
@@ -76,8 +76,8 @@ function ShoppingCart(props) {
                           <img
                             className={classes.cartItemImg}
                             src={
-                              cart.product.thumbnail
-                                ? `${STATIC_HOST}${cart.product.thumbnail?.url}`
+                              cart.product.image
+                                ? `${STATIC_HOST_LOCAL}${cart.product.image}`
                                 : THUMBNAIL_PLACEHOLDER
                             }
                             alt={cart.product.thumbnail?.name||'hinh loi'}
@@ -85,14 +85,25 @@ function ShoppingCart(props) {
                           <div className={classNames(classes.cartContent, 'cart-item__content')}>
                             <p className={classes.cartItemDescription}>{cart.product.name}</p>
                             <p className={classes.cartItemPrice}>
-                              {cart.quantity} x {cart.product.salePrice} đ
+                              {cart.quantity} x {cart.product.product_discount_price} đ
                             </p>
-                            <p className={classes.cartItemPrice}>Màu: Trắng</p>
-                            <p className={classes.cartItemPrice}>Size: L</p>
+                          {cart.product.product_varients.map((element, index) => {                            
+                            if (index.toString() === cart.color) {
+                              return <p key={index} className={classes.cartItemPrice}>Màu: {element.color.title}</p>                              
+                            }
+                            return ''
+                          })}
+                          {cart.product.product_varients.map( (element, index) => {    
+                            if (index.toString() === cart.size) {
+                              return <p key={index} className={classes.cartItemPrice}>Size: {element.size.title}</p>                              
+                            }
+                            return ''
+                          })}
+                           
                           </div>
                           <div className={classes.cartItemContent}>
                             <p className={classes.cartItemDescription}>
-                              {cart.quantity * cart.product.salePrice} đ
+                              {cart.quantity * cart.product.product_discount_price} đ
                             </p>
                           </div>
                           <div className={classes.cartItemContent}>
@@ -143,13 +154,13 @@ function ShoppingCart(props) {
                           <span>
                             {carts.reduce(
                               (a, b) =>
-                                a.quantity * a.product.salePrice + b.quantity * b.product.salePrice
+                                a.quantity * a.product.product_discount_price + b.quantity * b.product.product_discount_price
                             )}
                             đ
                           </span>
                         )}
                         {carts.length <= 1 && (
-                          <span>{carts[0].quantity * carts[0].product.salePrice}đ</span>
+                          <span>{carts[0].quantity * carts[0].product.product_discount_price}đ</span>
                         )}
                       </div>
                       <div className={classes.asideCheckout}>
@@ -158,13 +169,13 @@ function ShoppingCart(props) {
                           <span>
                             {carts.reduce(
                               (a, b) =>
-                                a.quantity * a.product.salePrice + b.quantity * b.product.salePrice
+                                a.quantity * a.product.product_discount_price + b.quantity * b.product.product_discount_price
                             )}
                             đ
                           </span>
                         )}
                         {carts.length <= 1 && (
-                          <span>{carts[0].quantity * carts[0].product.salePrice}đ</span>
+                          <span>{carts[0].quantity * carts[0].product.product_discount_price}đ</span>
                         )}
                       </div>
                       <Button className={classes.buttonCart} variant="contained" color="secondary">

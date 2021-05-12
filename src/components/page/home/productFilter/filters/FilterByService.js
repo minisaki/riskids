@@ -31,14 +31,13 @@ function FilterByService(props) {
     const classes = useStyles()
   const { filters={}, onChangeService } = props;
   const services = [
-    { value: 'isPromotion', label: 'Có khuyến mãi' },
-    { value: 'isFreeShip', label: 'Vẫn chuyển miễn phí' },
+    // { value: 'isPromotion', label: 'Có khuyến mãi' },
+    { value: 'is_freeship', label: 'Vẫn chuyển miễn phí' },
   ];
-
-  
 
   const handleChange = (event) => {
       if (!onChangeService) return;
+      console.log(event.target.name,  event.target.checked)
       onChangeService({ [event.target.name]: event.target.checked })
   };
 

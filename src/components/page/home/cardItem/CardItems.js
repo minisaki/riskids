@@ -20,7 +20,7 @@ function CardItems(props) {
   return (
     <>
       <div className={`col ${cardCheckStyle}`}>
-        <Link to={`/product/${product.id}`} className="card-link" >
+        <Link to={`/product/${product.url_slug}`} className="card-link" >
           <div className="card-item">
             <div className="card-item__image" data-category={product.get_per_product_discount_price > 0 ? ` -${product.get_per_product_discount_price}%` : 'New'} >
               <img src={thumbnailUrl} alt="hinh sp" className="card-item__img"></img>

@@ -26,7 +26,7 @@ function FilterByPrice(props) {
 
   const classes = useStyles();
 
-  const [values, setValues] = useState({'salePrice_gte': 0, 'salePrice_lte': 0})
+  const [values, setValues] = useState({'product_discount_price__gte': 0, 'product_discount_price__lte': 0})
 
   const handleChange = (e) => {  
     const { name, value } = e.target;
@@ -41,20 +41,29 @@ function FilterByPrice(props) {
       if (props.onClickByFilterPrice) {
         props.onClickByFilterPrice(values)
       }
-      setValues({'salePrice_gte': 0, 'salePrice_lte': 0})
+      // setValues({'product_discount_price__gte': 0, 'product_discount_price__lte': 0})
   }
+  const handleSubmitClose = () => {
+    if (props.onClickByFilterPrice) {
+      props.onClickByFilterPrice()
+    }
+    setValues({'product_discount_price__gte': 0, 'product_discount_price__lte': 0})
+}
 
   return (
     <>
       <p className="filter-price-title">Chọn khoảng giá</p>
       <Box className={classes.root}>
-        <TextField  name="salePrice_gte" value={values.salePrice_gte} onChange={handleChange} />
+        <TextField  name="product_discount_price__gte" value={values.product_discount_price__gte} onChange={handleChange} />
         <span className="input-midd">-</span>
-        <TextField  name="salePrice_lte" value={values.salePrice_lte} onChange={handleChange} />
+        <TextField  name="product_discount_price__lte" value={values.product_discount_price__lte} onChange={handleChange} />
       </Box>
 
       <Button className={classes.button} variant="outlined" color="primary" size="medium" onClick={handleSubmit}>
         Áp dụng
+      </Button>
+      <Button className={classes.button} variant="outlined" color="primary" size="medium" onClick={handleSubmitClose}>
+        Xóa
       </Button>
     </>
   );

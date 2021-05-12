@@ -6,17 +6,17 @@ import FilterByService from './filters/FilterByService';
 
 function ProductFilter(props) {
   const onChange = (categories) => {
-    if (props.onChange) {
-      // const newFilters = {
-      //   'category.id': categories.id,
-      // };
-      const CategoryName = categories.name;
-      props.onChange(categories.id, CategoryName);
+    if (props.onChange && categories) {
+      props.onChange(categories.id, categories.title);
+    } else {
+      props.onChange()
     }
   };
   const HandleSubmit = (newFilters) => {
-    if (props.onClickByFilterPrice) {
+    if (props.onClickByFilterPrice && newFilters) {
       props.onClickByFilterPrice(newFilters);
+    } else {
+      props.onClickByFilterPrice();
     }
   };
   const onChangeService = (services) => {

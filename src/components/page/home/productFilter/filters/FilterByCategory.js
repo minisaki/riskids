@@ -11,6 +11,12 @@ function FilterByCategory(props) {
       props.onChange(category);
     }
   };
+  const onClickCategoryAll = () => {
+    if (props.onChange) {
+      props.onChange();
+    }
+  }
+  
 
   return (
     <>
@@ -21,7 +27,10 @@ function FilterByCategory(props) {
           <h3 className="category_aside-title">DANH MỤC SẢN PHẨM</h3>
           
           <ul className="category_aside-list">
-            <div  className="category_aside-item">Tất cả sản phẩm</div>
+            <div  
+              className="category_aside-item"
+              onClick={onClickCategoryAll}
+              >Tất cả sản phẩm</div>
             {categories?.map((category, index) => {
               return (
                 <li

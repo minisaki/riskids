@@ -23,9 +23,11 @@ const productApi = {
             }
         };
     },
-    async get(id) {
-        const url =  `/products/${id}`;
-        return await axiosClient.get(url);
+    async get(slug) {
+        const url =  `/products/${slug}/`;
+        
+        const product = await axiosClient.get(url);
+        return product;
     },
     
     add(data) {

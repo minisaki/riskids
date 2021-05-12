@@ -49,19 +49,14 @@ function Category(props) {
   let nameCategoryLocation = location.state;
   const queryParams = useMemo(() => {
     const params = queryString.parse(location.search);
-    console.log(params)
     return {
       ...params,
       page: Number.parseInt(params.page) || 1,
-      is_freeship: params.isFreeShip === 'true',
+      is_freeship: params.is_freeship === 'true',
       
     };
   }, [location.search]);
-  // if (nameCategoryLocation) {
-  //   queryParams['category_id'] = nameCategoryLocation?.id
-  // }
-  
-  console.log(queryParams);
+
   const [valueSort, setValueSort] = useState(nameCategoryLocation?.id ? 1 : 0);
   const [productList, setProductList] = useState([]);
   const [pagination, setPagination] = useState({
@@ -92,16 +87,7 @@ function Category(props) {
   }, [nameCategoryLocation]);
 
   const [nameCategory, setNameCategory] = useState(nameCategoryLocation?.name || 'Tất cả');
-  // if (location.search) {
-  //   setValueSort(1)
-  //   const params = queryString.parse(location.search);
-  //   const categoryId =Number.parseInt(params['category.id'])
-  //   const index = categories.findIndex((category) => category.id === categoryId)
-  //   console.log(index)
-  //   // setNameCategory(categories[index].name)
-    
-  // }
-  console.log(nameCategory);
+  
   const settingSlier = {
     dots: true,
     infinite: true,
@@ -157,7 +143,19 @@ function Category(props) {
         setValueSort(newValue);
         break;
       case 1:
-        // code block
+        filters = {
+          ...filters,
+          is_freeship: false,
+          page: 1
+        };
+        delete filters['ordering'];
+        console.log(filters)
+        history.push({
+          pathname: history.location.pathname,
+          search: queryString.stringify(filters),
+        });
+        // setNameCategory('Xem Nhiều');
+        setValueSort(newValue);
         break;
       case 2:
         filters = {
@@ -247,20 +245,34 @@ function Category(props) {
     //   _page: 1,
     //   ...categoryId,
     // }));
-    const filters = {
-      ...queryParams,
-      _page: 1,
-      'category.id': Number.parseInt(categoryId),
-    };
-    delete filters['salePrice_lte'];
-    delete filters['salePrice_gte'];
-    delete filters['_sort'];
-    history.push({
-      pathname: history.location.pathname,
-      search: queryString.stringify(filters),
-    });
-    setNameCategory(name);
-    setValueSort(1);
+    if (categoryId) {
+      const filters = {
+        ...queryParams,
+        page: 1,
+        'category_id': Number.parseInt(categoryId),
+      };
+      delete filters['ordering']
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+      setNameCategory(name);
+      setValueSort(1);
+    } else {
+      const filters = {
+        ...queryParams,
+        page: 1,
+      };
+      delete filters['ordering']
+      delete filters['category_id']
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+      setNameCategory('Tất cả sản phẩm');
+      setValueSort(1);
+    }
+    
   };
 
   const handleClickSortPrice = (newFilters) => {
@@ -269,26 +281,41 @@ function Category(props) {
     //   ...newFilters,
     //   _sort: "salePrice:ASC",
     // }));
-    const filters = {
-      ...queryParams,
-      ...newFilters,
-    };
-    history.push({
-      pathname: history.location.pathname,
-      search: queryString.stringify(filters),
-    });
-    setValueSort(3);
+    if (newFilters) {
+      const filters = {
+        ...queryParams,
+        ...newFilters,
+      };
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+      setValueSort(1);
+    } else {
+      const filters = {
+        ...queryParams,
+      };
+      
+      delete filters['product_discount_price__gte']
+      delete filters['product_discount_price__lte']
+      history.push({
+        pathname: history.location.pathname,
+        search: queryString.stringify(filters),
+      });
+      setValueSort(1);
+    }
+    
   };
   const HandleClickService = (newFilters) => {
     // setFilters((prevFilters) => ({
     //   ...prevFilters,
     //   ...newFilters, }))
+    
     const filters = {
       ...queryParams,
-      _page: 1,
-      _limit: 20,
       ...newFilters,
     };
+    console.log(filters)
     history.push({
       pathname: history.location.pathname,
       search: queryString.stringify(filters),

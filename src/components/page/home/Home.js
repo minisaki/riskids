@@ -16,7 +16,7 @@ function Home() {
         <Switch>
           <Route path={match.path} exact component={Homepage}/>
           <Route path={`${match.path}categories`} component={Category }/>
-          <Route path={`${match.path}product/:slug`} component={Index}/>          
+          <Route path={`${match.path}products/:slug`} component={Index}/>          
           <Route path={`${match.path}cart/`} component={ShoppingCart}/>          
         </Switch>
   );

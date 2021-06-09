@@ -27,10 +27,9 @@ function RegisterForm(props) {
   // validation filed
   const schema = yup.object().shape({
     textEmail: yup.string()
-      .required('Vui lòng nhập trường này!')
-      .email('Vui lòng nhập dúng Email'),
+      .required('Vui lòng nhập trường này!'),
     textPassword: yup.string()
-      .min(8, "Tối thiểu 8 kí tự")
+      .min(6, "Tối thiểu 8 kí tự")
       .required("Vui lòng nhập trường này!"),
     reTextPassword: yup.string()
       .oneOf([yup.ref("textPassword")], "Password bạn nhập chưa khớp")
@@ -83,7 +82,7 @@ function RegisterForm(props) {
         <i className="fas fa-times icon-close" onClick={handleCloseForm}></i>
       </div>
       <div className="auth__input">
-        <InputField name="textEmail" label="Email" labelWidth={40} form={form}></InputField>
+        <InputField name="textEmail" label="Tên đăng nhập" labelWidth={110} form={form}></InputField>
         <PasswordField
           name="textPassword"
           label="Mật Khẩu"

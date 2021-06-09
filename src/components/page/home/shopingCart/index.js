@@ -1,34 +1,39 @@
-import React from 'react';
+import React, { useMemo, useEffect, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
-// @material-ui/icons
 
-import Close from '@material-ui/icons/Close';
-import Remove from '@material-ui/icons/Remove';
-import Add from '@material-ui/icons/Add';
+// @material-ui/icons
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import FormOderCart from './formOrderCart';
+import CartItem from './cartItem';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 // core components
 
-import Card from './Card/Card.js';
-import CardBody from './Card/CardBody.js';
 import { useSelector, useDispatch } from 'react-redux';
 import shoppingCartStyle from './shoppingCartStyle.js';
-import { STATIC_HOST, THUMBNAIL_PLACEHOLDER, STATIC_HOST_LOCAL } from '../../../../constants/conmon.js';
-import { ButtonGroup, Button, TextField, Input } from '@material-ui/core';
+
 import {
   increaseCartQuantity,
   decreaseCartQuantity,
   removeCartItem,
   editQuantityCartItem,
+  deleteCartOrder,
 } from '../../../redux/cartSlice.js';
+import { create } from '../../../redux/orderSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import orderApi from '../../../../api/orderApi';
+import CartSkeleton from './CartSteleton';
+import { Breadcrumbs, Link } from '@material-ui/core';
 
 const useStyles = makeStyles(shoppingCartStyle);
 
 function ShoppingCart(props) {
   const classes = useStyles();
   const carts = useSelector((state) => state.cartItem.current);
+  const [customer, setCustomer] = useState('');
+  const [loading, setLoading] = useState(true);
   const message = useSelector((state) => state.cartItem.message);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -54,149 +59,149 @@ function ShoppingCart(props) {
     }
   };
 
+  const deleteCart = () => {
+    try {
+      const action = deleteCartOrder();
+
+      dispatch(action);
+    } catch (error) {
+      enqueueSnackbar('có lỗi khi xóa', { variant: 'error' });
+    }
+  };
+
   const onChangeQuantity = (value, cartId) => {
     const payload = { quantity: value, id: cartId };
     dispatch(editQuantityCartItem(payload));
     enqueueSnackbar('Sửa số lượng thành công', { variant: 'success' });
   };
 
-  return (
-    <div className={classNames(classes.main, classes.mainRaised)}>
-      <div className={classes.container}>
-        <Card plain>
-          <CardBody plain>
-            {carts.length && (
-              <div className="grid wide">
-                <div className={classes.cartTitle}>Giỏ hàng</div>
-                <div className="row">
-                  <div className="col l-9 m-12 c-12">
-                    <ul className={classes.resetUl}>
-                      {carts.map((cart, index) => (
-                        <li key={index} className={classes.cartItemDetail}>
-                          <img
-                            className={classes.cartItemImg}
-                            src={
-                              cart.product.image
-                                ? `${STATIC_HOST_LOCAL}${cart.product.image}`
-                                : THUMBNAIL_PLACEHOLDER
-                            }
-                            alt={cart.product.thumbnail?.name||'hinh loi'}
-                          ></img>
-                          <div className={classNames(classes.cartContent, 'cart-item__content')}>
-                            <p className={classes.cartItemDescription}>{cart.product.name}</p>
-                            <p className={classes.cartItemPrice}>
-                              {cart.quantity} x {cart.product.product_discount_price} đ
-                            </p>
-                          {cart.product.product_varients.map((element, index) => {                            
-                            if (index.toString() === cart.color) {
-                              return <p key={index} className={classes.cartItemPrice}>Màu: {element.color.title}</p>                              
-                            }
-                            return ''
-                          })}
-                          {cart.product.product_varients.map( (element, index) => {    
-                            if (index.toString() === cart.size) {
-                              return <p key={index} className={classes.cartItemPrice}>Size: {element.size.title}</p>                              
-                            }
-                            return ''
-                          })}
-                           
-                          </div>
-                          <div className={classes.cartItemContent}>
-                            <p className={classes.cartItemDescription}>
-                              {cart.quantity * cart.product.product_discount_price} đ
-                            </p>
-                          </div>
-                          <div className={classes.cartItemContent}>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              size="medium"
-                              className={classes.buttonLeft}
-                              onClick={() => decreaseQuantity(cart.id)}
-                              disabled = {cart.quantity > 1 ? false : true}
-                              classes= {{ disabled: classes.disabledButton }}
-                            >
-                              <Remove />
-                            </Button>
-                            <input
-                              className={classes.input}
-                              value={cart.quantity}
-                              onChange={(e) => onChangeQuantity(e.target.value, cart.id)}
-                              type={'text'}
-                            />
+  const total = useMemo(() => {
+    if (carts.length > 0) {
+      if (carts.length > 1) {
+        return carts.reduce((a, b) => a + b.quantity * b.product.price, 0);
+      } else {
+        return carts[0].quantity * carts[0].product.price;
+      }
+    }
+  }, [carts]);
 
-                            <Button
-                              className={classes.buttonRight}
-                              variant="outlined"
-                              color="primary"
-                              size="medium"
-                              onClick={() => icreaseQuantity(cart.id)}
-                            >
-                              <Add />
-                            </Button>
-                          </div>
-                          <div
-                            className={classes.cartItemClose}
-                            onClick={() => removeCart(cart.id)}
-                          >
-                            <Close></Close>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="col l-3">
-                    <div className={classes.asideWrapper}>
-                      <h3 className={classes.asideTitle}>Giỏ hàng của bạn đang có</h3>
-                      <div className={classes.asideCheckout}>
-                        <span>Tạm tính</span>
-                        {carts.length > 1 && (
-                          <span>
-                            {carts.reduce(
-                              (a, b) =>
-                                a.quantity * a.product.product_discount_price + b.quantity * b.product.product_discount_price
-                            )}
-                            đ
-                          </span>
-                        )}
-                        {carts.length <= 1 && (
-                          <span>{carts[0].quantity * carts[0].product.product_discount_price}đ</span>
-                        )}
-                      </div>
-                      <div className={classes.asideCheckout}>
-                        <span>Thành tiền</span>
-                        {carts.length > 1 && (
-                          <span>
-                            {carts.reduce(
-                              (a, b) =>
-                                a.quantity * a.product.product_discount_price + b.quantity * b.product.product_discount_price
-                            )}
-                            đ
-                          </span>
-                        )}
-                        {carts.length <= 1 && (
-                          <span>{carts[0].quantity * carts[0].product.product_discount_price}đ</span>
-                        )}
-                      </div>
-                      <Button className={classes.buttonCart} variant="contained" color="secondary">
-                        Đặt hàng
-                      </Button>
+  const handleSubmitForm = async (data) => {
+    const idBrowser = localStorage.getItem('idbrowser');
+    const instantData = {};
+    instantData.username = data.nameOrder + idBrowser;
+    instantData.password = data.phoneOrder;
+    instantData.customeruser = {
+      phone: data.phoneOrder,
+      address: data.addressOrder,
+      name: data.nameOrder,
+    };
+    instantData.codeOrder = idBrowser;
+    instantData.carts = carts;
+    try {
+      const action = create(instantData);
+      const resultAction = await dispatch(action);
+      const order = unwrapResult(resultAction);
+
+      console.log('new order: ', order);
+
+      enqueueSnackbar('tạo đơn hàng thanh cong', { variant: 'success' });
+      if (order.code) {
+        deleteCart();
+      }
+    } catch (error) {
+      console.log('failed to register: ', error);
+      enqueueSnackbar(error.message, { variant: 'error' });
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const customer = await orderApi.get();
+        setCustomer(customer['data']);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log('Failed to fetch product: ', error);
+      }
+    })();
+  }, []);
+
+  const currencyPrice = new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(total);
+  return (
+    <Fragment>
+      {!loading && carts.length && (
+        <div className={classNames(classes.main, classes.mainRaised)}>
+          <div className={classes.container}>
+            <div className="grid wide">
+              <Breadcrumbs 
+                separator={<NavigateNextIcon fontSize="large" />}
+                aria-label="breadcrumb"
+                className={classes.breadcrumb}
+              >
+                <Link color="inherit" to="/">
+                  Trang chủ
+                </Link>
+                <Link color="inherit" href="/getting-started/installation/">
+                  Chi tiết giỏ hàng
+                </Link>
+              </Breadcrumbs>
+
+              <div className="row">
+                <div className="col l-9 m-12 c-12">
+                  <div className={classes.asideTitle}>Sản Phẩm Trong Giỏ</div>
+                  <CartItem
+                    classes={classes}
+                    carts={carts}
+                    decreaseQuantity={decreaseQuantity}
+                    icreaseQuantity={icreaseQuantity}
+                    removeCart={removeCart}
+                    onChangeQuantity={onChangeQuantity}
+                  />
+                </div>
+                <div className="col l-3 m-12 c-12">
+                  <div className={classes.asideWrapper}>
+                    <h3 className={classes.asideTitle}>Thành Tiền</h3>
+                    <div className={classes.asideCheckout}>
+                      <span>Tạm tính</span>
+                      <span>{currencyPrice}</span>
+                    </div>
+                    <div className={classes.asideCheckout}>
+                      <span>Thành tiền</span>
+                      <span>{currencyPrice}</span>
                     </div>
                   </div>
+                  <FormOderCart
+                    classes={classes}
+                    handleSubmitForm={handleSubmitForm}
+                    customer={customer}
+                  />
                 </div>
               </div>
-            )}
-            {!carts.length && (
-              <div className="grid wide">
-                <div className={classes.cartTitle}>
-                  Không có sản phẩm nào trong giỏ hàng của bạn.
-                </div>
-              </div>
-            )}
-          </CardBody>
-        </Card>
-      </div>
-    </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {!loading && !carts.length && (
+        <div className={classNames(classes.main, classes.mainRaised)}>
+          <div className={classes.container}>
+            <div className="grid wide">
+              <div className={classes.cartTitle}>Giỏ hàng trống</div>
+            </div>
+          </div>
+        </div>
+      )}
+      {loading && (
+        <div className={classNames(classes.main, classes.mainRaised)}>
+          <div className={classes.container}>
+            <CartSkeleton length={6} />
+          </div>
+        </div>
+      )}
+    </Fragment>
   );
 }
 

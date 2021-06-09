@@ -6,9 +6,13 @@ const categoryApi = {
         const url =  `/categories/`;
         return await axiosClient.get(url);
     },
-    get(id) {
+    async get(id) {
         const url =  `/categories/${id}`;
-        return axiosClient.get( url);
+        return await axiosClient.get( url);
+    },
+    async getMin() {
+        const url =  `/categories/cate_mini/`;
+        return await axiosClient.get( url);
     },
     add(data) {
         const url = '/categories';

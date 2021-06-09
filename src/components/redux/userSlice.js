@@ -5,21 +5,23 @@ import storagekeys from '../../constants/storageKeys';
 export const register = createAsyncThunk('users/register', async (payload) => {
   // call api to register
   const data = await userApi.register(payload);
+  const token = await userApi.login(payload);
   // save data to local storage
-  localStorage.setItem(storagekeys.TOKEN, data.jwt);
-  localStorage.setItem(storagekeys.USER, JSON.stringify(data.user));
+  localStorage.setItem(storagekeys.TOKEN, token.access);
+  localStorage.setItem(storagekeys.USER, JSON.stringify(data.data));
   // return user data
-  return data.user;
+  return data.data;
 });
 
 export const login = createAsyncThunk('users/login', async (payload) => {
   // call api to register
-  const data = await userApi.login(payload);
+  const token = await userApi.login(payload);
+  const data = await userApi.get(payload.username);
   // save data to local storage
-  localStorage.setItem(storagekeys.TOKEN, data.jwt);
-  localStorage.setItem(storagekeys.USER, JSON.stringify(data.user));
+  localStorage.setItem(storagekeys.TOKEN, token.access);
+  localStorage.setItem(storagekeys.USER, JSON.stringify(data.data));
   // return user data
-  return data.user;
+  return data.data;
 });
 
 const userSlice = createSlice({
@@ -43,6 +45,7 @@ const userSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     [register.fulfilled]: (state, action) => {
       // Add user to the state array
+      console.log(action.payload)
       state.current = action.payload;
     },
 

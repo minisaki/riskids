@@ -10,7 +10,7 @@ export const fetchCategory = createAsyncThunk('category', async () => {
   // const categoryName = []
   // data.map((category)=> categoryName.push(category.name))
   // localStorage.setItem(storagekeys.CATEGORIES, JSON.stringify(categoryName));
-  // return user data
+  // return user data 
   
   return data;
 });

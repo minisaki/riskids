@@ -50,6 +50,7 @@ function Card(props) {
           <CardItems key={product.id} cardStyle="l-3 m-6 c-12" product={product} />
         ))}
       </div>
+      <div>Xem thêm</div>
     </>
   );
 }

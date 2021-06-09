@@ -5,7 +5,7 @@ import Home from './components/page/home/Home';
 import Product from './components/page/home/products/Product';
 import Footer from './components/footer/Footer';
 import ImageZoomTest from './components/page/ImageZoomTest';
-// import owlCarousel from './components/owlCarouselProductList/owlCarousel';
+import owlCarousel from './components/owlCarouselProductList/owlCarousel';
 import './App.css';
 import './components/responsive.css';
 import { Provider } from 'react-redux';
@@ -74,7 +74,7 @@ function App() {
                 
 
                 {/* <Route exact path="/testZoom" component={ImageZoomTest} /> */}
-                {/* <Route exact path="/owl" component={owlCarousel} /> */}
+                <Route exact path="/owl" component={owlCarousel} />
                 {/* <Route exact path="/counterIndex" component={CounterIndex} /> */}
               {/* </Switch> */}
               <Footer />

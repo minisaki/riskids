@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import classNames from 'classnames';
@@ -16,13 +16,21 @@ import productStyle from './productStyle.js';
 import './ProductPage.css';
 import Header from './Header/Header.js';
 import HeaderLinks from './Header/HeaderLinks.js';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import productApi from '../../../../api/productApi';
 import { STATIC_HOST_LOCAL } from '../../../../constants/conmon';
 import { useDispatch } from 'react-redux';
 import { addCartItem } from '../../../redux/cartSlice';
 import { useSnackbar } from 'notistack';
 import DOMPurify from 'dompurify';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import CardItems from '../cardItem/CardItems';
+import storagekeys from '../../../../constants/storageKeys';
+import queryString from 'query-string';
+import './slice.css';
+import OwlCarousel from '../../../owlCarouselProductList/owlCarousel';
 
 const useStyles = makeStyles(productStyle);
 function Index(props) {
@@ -32,8 +40,6 @@ function Index(props) {
   const { slug } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(true);
-
-  const [filters, setFilters] = useState(slug ? { slug: slug } : {});
   const [product, setProduct] = useState({});
   const imgList = product.product_media;
   // const thumbnailUrl = []
@@ -50,11 +56,18 @@ function Index(props) {
 
   const dispatch = useDispatch();
   const safeDescription = DOMPurify.sanitize(product.description);
+  
+  let location = useLocation();
+  const queryParams = useMemo(() => {
+    const path = location.pathname;
+    return path;
+  }, [location.pathname]);
+  
 
   useEffect(() => {
     (async () => {
       try {
-        const product = await productApi.get(filters.slug);
+        const product = await productApi.get(queryParams);
         setProduct(product);
         setLoading(false);
       } catch (error) {
@@ -63,12 +76,22 @@ function Index(props) {
 
       //   setLoading(false);
     })();
-  }, [filters]);
+  }, [queryParams]);
+
+  
 
   const submitCartItem = () => {
     const cartItem = {
       id: `${product.id}_${colorSelect}_${sizeSelect}`,
-      product: product,
+      product: {
+        id: product.id,
+        name: product.product_name,
+        price: product.product_discount_price,
+        is_stock_total: product.is_stock_total,
+        is_freeship: product.is_freeship,
+        image: product.image,
+        product_varients: product.product_varients,
+      },
       quantity: 1,
       color: colorSelect,
       size: sizeSelect,
@@ -83,7 +106,7 @@ function Index(props) {
   console.log(colorSelect, typeof colorSelect);
   return (
     <div className={classes.productPage}>
-      <div className={classNames(classes.section, classes.sectionGray)}>
+      <div className={classNames(classes.section)}>
         <div className={classes.container}>
           <div className={classNames(classes.main, classes.mainRaised)}>
             {loading ? (
@@ -239,12 +262,21 @@ function Index(props) {
                       Thêm giỏ hàng &nbsp; <ShoppingCart />
                     </Button>
                   </GridContainer>
+                  <GridContainer className={classes.viewCart}>
+                    <Button round color="rose">
+                      <Link className={classes.linkCart} to={`/cart/`}>
+                        {' '}
+                        xem giỏ hàng{' '}
+                      </Link>
+                    </Button>
+                  </GridContainer>
                 </GridItem>
               </GridContainer>
             )}
           </div>
         </div>
-      </div>
+      </div>      
+        <OwlCarousel text="DANH MỤC SẢN PHẨM ĐÃ XEM"/>
     </div>
   );
 }

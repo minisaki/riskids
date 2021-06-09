@@ -13,6 +13,7 @@ import ProductFilter from '../productFilter/ProductFilter';
 import ProductSkeletonList from '../ProductSkeletonList';
 import queryString from 'query-string';
 import './Category.css';
+import OwlCarousel from '../../../owlCarouselProductList/owlCarousel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   label: {
     '& > span': { fontSize: '1.2rem' },
+    [theme.breakpoints.down('sm')]: {
+      '& > span': { fontSize: '1rem' },
+    }
   },
   panigation: {
     display: 'flex',
@@ -53,7 +57,6 @@ function Category(props) {
       ...params,
       page: Number.parseInt(params.page) || 1,
       is_freeship: params.is_freeship === 'true',
-      
     };
   }, [location.search]);
 
@@ -65,7 +68,7 @@ function Category(props) {
     page: 1,
   });
   const [loading, setLoading] = useState(true);
-  
+
   // const [filters, setFilters] = useState({
   //   _page: 1,
   //   _limit: 20,
@@ -77,54 +80,17 @@ function Category(props) {
   //     'category.id' : nameCategoryLocation.id
   //   }))
   // }
-  
+
   useEffect(() => {
-    if(nameCategoryLocation) {
+    if (nameCategoryLocation) {
       setNameCategory(nameCategoryLocation?.name);
       setValueSort(1);
     }
-    
   }, [nameCategoryLocation]);
 
   const [nameCategory, setNameCategory] = useState(nameCategoryLocation?.name || 'Tất cả');
-  
-  const settingSlier = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 3,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    pauseOnHover: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
 
+  
   const handleChangeTab = (event, newValue) => {
     let filters = queryParams;
     switch (newValue) {
@@ -134,7 +100,7 @@ function Category(props) {
           ordering: '-view_product',
         };
         // delete filters['category_id'];
-        console.log(filters)
+        console.log(filters);
         history.push({
           pathname: history.location.pathname,
           search: queryString.stringify(filters),
@@ -146,10 +112,10 @@ function Category(props) {
         filters = {
           ...filters,
           is_freeship: false,
-          page: 1
+          page: 1,
         };
         delete filters['ordering'];
-        console.log(filters)
+        console.log(filters);
         history.push({
           pathname: history.location.pathname,
           search: queryString.stringify(filters),
@@ -168,7 +134,7 @@ function Category(props) {
           search: queryString.stringify(filters),
         });
         setValueSort(newValue);
-        
+
         break;
       case 3:
         // setFilters((prevFilters) => ({
@@ -221,7 +187,7 @@ function Category(props) {
   };
 
   const handlePageChange = (e, page) => {
-    console.log(page)
+    console.log(page);
     const filters = {
       page: page,
     };
@@ -234,7 +200,7 @@ function Category(props) {
     window.scroll({
       top: 50,
       left: 100,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -249,9 +215,9 @@ function Category(props) {
       const filters = {
         ...queryParams,
         page: 1,
-        'category_id': Number.parseInt(categoryId),
+        category_id: Number.parseInt(categoryId),
       };
-      delete filters['ordering']
+      delete filters['ordering'];
       history.push({
         pathname: history.location.pathname,
         search: queryString.stringify(filters),
@@ -263,8 +229,8 @@ function Category(props) {
         ...queryParams,
         page: 1,
       };
-      delete filters['ordering']
-      delete filters['category_id']
+      delete filters['ordering'];
+      delete filters['category_id'];
       history.push({
         pathname: history.location.pathname,
         search: queryString.stringify(filters),
@@ -272,7 +238,6 @@ function Category(props) {
       setNameCategory('Tất cả sản phẩm');
       setValueSort(1);
     }
-    
   };
 
   const handleClickSortPrice = (newFilters) => {
@@ -295,27 +260,26 @@ function Category(props) {
       const filters = {
         ...queryParams,
       };
-      
-      delete filters['product_discount_price__gte']
-      delete filters['product_discount_price__lte']
+
+      delete filters['product_discount_price__gte'];
+      delete filters['product_discount_price__lte'];
       history.push({
         pathname: history.location.pathname,
         search: queryString.stringify(filters),
       });
       setValueSort(1);
     }
-    
   };
   const HandleClickService = (newFilters) => {
     // setFilters((prevFilters) => ({
     //   ...prevFilters,
     //   ...newFilters, }))
-    
+
     const filters = {
       ...queryParams,
       ...newFilters,
     };
-    console.log(filters)
+    console.log(filters);
     history.push({
       pathname: history.location.pathname,
       search: queryString.stringify(filters),
@@ -337,6 +301,24 @@ function Category(props) {
     })();
   }, [queryParams]);
 
+  // useEffect(() => {
+  //   const cartFix = document.getElementById('fix-cart');
+
+  //   const scrollCallBack = window.addEventListener('scroll', () => {
+  //     console.log(window.scrollX, window.scrollY, window.pageYOffset)
+  //     if (window.pageYOffset > 200 && window.pageYOffset < 900) {
+  //       cartFix.classList.add('sticky');
+  //      } 
+  //     else {
+  //         cartFix.classList.remove('sticky');
+        
+  //     }
+  //   });
+  //   return () => {
+  //     window.removeEventListener('scroll', scrollCallBack);
+  //   };
+  // });
+
   return (
     <div className="container">
       <div className="grid wide">
@@ -353,8 +335,8 @@ function Category(props) {
           </Link>
         </Breadcrumbs>
         <div className="row product-container__wrapper">
-          <div className="col l-3 silebar">
-            <div className="category_aside">
+          <div className="col l-2-4 c-0 m-0" >
+            <div className="category_aside" id="fix-cart">
               <ProductFilter
                 onChange={HandleClickCategory}
                 onChangeService={HandleClickService}
@@ -363,7 +345,7 @@ function Category(props) {
               />
             </div>
           </div>
-          <div className="col l-9 m-12 c-12 product-container__list">
+          <div className="col l-9-6 m-12 c-12 product-container__list">
             <Paper className={classes.root}>
               <Tabs
                 value={valueSort}
@@ -382,12 +364,7 @@ function Category(props) {
             {loading ? (
               <ProductSkeletonList length={9} />
             ) : (
-              <Card
-                CategoryName={
-                   nameCategory
-                }
-                data={productList}
-              />
+              <Card CategoryName={nameCategory} data={productList} />
             )}
 
             <div className={classes.panigation}>
@@ -400,13 +377,12 @@ function Category(props) {
                 onChange={handlePageChange}
               />
             </div>
-            {/* <Slider {...settingSlier}>
-              <CardItems
-                cardStyle="col-product c-12"
-                product = {productList}
-              />
-            </Slider> */}
           </div>
+            
+        </div>
+        <div className="row product-container__wrapper">
+          
+        <OwlCarousel text="DANH MỤC SẢN PHẨM ĐÃ XEM"  className="categori_slider product-container__list"/>
         </div>
       </div>
     </div>

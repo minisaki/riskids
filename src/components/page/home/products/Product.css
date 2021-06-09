@@ -3,7 +3,7 @@
 }
 .product-container__wrapper {
   border: 1px solid var(--border-color);
-  margin-bottom: 100px;  
+  margin-bottom: 20px;  
 }
 .product-container__title-text {
   font-size: 1.4rem;

@@ -6,6 +6,7 @@ import { fetchCategory } from '../../redux/categorySlice';
 import { useDispatch, useSelector } from 'react-redux';
 import queryString from 'query-string';
 import './NabarMenu.css';
+import storagekeys from '../../../constants/storageKeys';
 
 const NabarMenu = (props) => {
   const history = useHistory();
@@ -38,6 +39,11 @@ const NabarMenu = (props) => {
         const action = fetchCategory();
         const resultAction = await dispatch(action);
         unwrapResult(resultAction);
+        const idbrowser = localStorage.getItem(storagekeys.IDBROWSER);
+        if (!idbrowser) {
+          const today = new Date()
+          localStorage.setItem(storagekeys.IDBROWSER, JSON.stringify(today.getTime()));
+        }
       } catch (error) {
         console.log('Failed to fetch product list: ', error);
       }

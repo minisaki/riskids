@@ -30,7 +30,7 @@
   display: none;
 }
 .menu__item:hover {
-  background-color: #eeeeee;
+  background-color: #fafafa;
 }
 .menu__item:hover .menu-detail {
   display: block;

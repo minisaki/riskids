@@ -23,9 +23,9 @@ const productApi = {
             }
         };
     },
-    async get(slug) {
-        const url =  `/products/${slug}/`;
-        
+    async get(params) {
+        const url =  `${params}`;
+        console.log(url)
         const product = await axiosClient.get(url);
         return product;
     },

@@ -22,9 +22,7 @@ function Auth(props) {
     const handleSubmitRegister = async (data) => {
         // auto set username
         const instantData = {}
-        instantData.email = data.textEmail
         instantData.username = data.textEmail
-        instantData.fullName = 'Easy Frontend'
         instantData.password = data.textPassword
         try {            
             const action = register(instantData)
@@ -47,7 +45,7 @@ function Auth(props) {
     const handleSubmitLogin = async (data) => {
         // auto set username
         const instantData = {}
-        instantData.identifier = data.textEmail
+        instantData.username = data.textEmail
         instantData.password = data.textPassword
         try {            
             const action = login(instantData)

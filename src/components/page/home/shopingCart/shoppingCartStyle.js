@@ -6,10 +6,7 @@ import {
   grayColor,
 } from '../ProductPage/material-kit-pro-react.js';
 
-import buttonGroup from './buttonGroupStyle.js';
-import { NonceProvider } from 'react-select';
-
-const styles = {
+const styles = (theme) => ( {
   main: {
     marginTop: '140px !important',
     
@@ -123,26 +120,38 @@ const styles = {
     listStyle: 'none',
     margin: 0,
     padding: 0,
-    border: '1px solid #e5e5e5',
     borderRadius: 5,
   },
   cartTitle: {
-    color: 'var(--text-color)',
-    fontSize: '2rem',
+    color: 'var(--white-color)',
+    fontSize: '1.6rem',
     fontWeight: 500,
-    padding: 10,
+    padding: '12px 6px',
+    margin: 0,
+    backgroundColor: 'var(--primary-color)',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    [theme.breakpoints.down('sm')]: {
+      
+      
+    }
+    
   },
   cartItemDetail: {
     display: 'flex',
     position: 'relative',
     justifyContent: 'space-between',
     backgroundColor: 'var(--white-color)',
-    marginBottom: 20,
-    // borderBottom: '1px solid #e5e5e5',
+    borderBottom: '1px solid #e5e5e5',
+    [theme.breakpoints.down('sm')]: {
+      marginTop: 20,
+      marginBottom: 20
+    }
+    
   },
   cartItemImg: {
     width: '16%',
-    margin: 10,
+    margin: 5,
   },
   cartItemContent: {
     padding: 8,
@@ -150,6 +159,39 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignSelf: 'center',
+    [theme.breakpoints.down('sm')]: {
+      '&>p': {
+        fontSize: '1.2rem'
+      },
+      '&>button': {
+        height: 20,
+        minWidth: 20,
+        maxWidth: 20,
+      },
+      '&>input': {
+        height: 20,
+        minWidth: 20,
+        maxWidth: 20,
+        fontSize: '1rem'
+      },
+      
+    },
+    [theme.breakpoints.down('xs')]: {
+      '&>p': {
+        fontSize: '1rem'
+      },
+      '&>button': {
+        height: 20,
+        minWidth: 16,
+        maxWidth: 16,
+      },
+      '&>input': {
+        height: 20,
+        minWidth: 16,
+        maxWidth: 16,
+        fontSize: '1rem'
+      },
+    },
   },
   cartItemDescription: {
     padding: 8,
@@ -157,6 +199,7 @@ const styles = {
     color: 'var(--primary-color)',
     fontSize: '1.8rem',
     fontWeight: 500,
+    
   },
   cartItemPrice: {
     padding: '4px 4px 4px 10px',
@@ -181,6 +224,13 @@ const styles = {
       fontSize: '1.6rem',
       cursor: 'pointer',
     },
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 0,
+      paddingRight: 0,
+      '& > svg': {
+        fontSize: '1rem',
+      },
+    }
   },
   iconCloseCartProduct: {},
   input: {
@@ -224,25 +274,65 @@ const styles = {
   },
   cartContent: {
     minWidth: 350,
+    [theme.breakpoints.down('sm')]: {
+      minWidth: 100,
+      paddingRight: 10,
+      '& > p': {
+        fontSize: '1rem',
+        lineHeight: '1rem'
+      }
+    },
+    [theme.breakpoints.down('xs')]: {
+      minWidth: 60,
+      paddingRight: 5,
+      '& > p': {
+        fontSize: '1rem',
+        lineHeight: '1rem'
+      }
+    },
   },
   asideWrapper: {
     backgroundColor: 'var(--white-color)',
     // height: 250,
     borderRadius: 5,
+    marginBottom: 20,
+    border: '1px solid #e5e5e5 !important',
   },
   asideTitle: {
     color: 'var(--white-color)',
-    backgroundColor: 'var(--primary-color)',
+    backgroundColor: '#ec2154',
     fontSize: '1.6rem',
     padding: '12px 6px',
     margin: 0,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
+    lineHeight: '1.4rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2rem',
+      padding: '6px',
+    }
   },
   asideCheckout: {
     padding: 10,
+    height: 50,
+    // borderBottom: '1px solid #e5e5e5',
+    lineHeight: '3rem',
+    alignSelf: 'center',
+    display: 'flex',
+    justifyContent: 'space-between',
+    '& > span:first-child': {
+      fontSize: '1.2rem',
+      color: '#a9a9a9',
+    },
+    '& > span:last-child': {
+      fontSize: '1.6rem',
+      color: 'var(--primary-color)',
+      fontWeight: 500,
+    },
+  },
+  asideCheckoutInfo: {
+    padding: 10,
     height: 60,
-    borderBottom: '1px solid #e5e5e5',
     lineHeight: '3rem',
     alignSelf: 'center',
     display: 'flex',
@@ -264,7 +354,17 @@ const styles = {
     '&:hover': {
       backgroundColor: '#da449f',
     },
+    marginTop: 20
   },
-};
+  inputFiled: {
+    '& > label': {
+      fontSize: '1.3rem',
+    },
+  },
+  // breadcrumb: {
+  //   margin: 10,
+  // }
+}
+);
 
 export default styles;

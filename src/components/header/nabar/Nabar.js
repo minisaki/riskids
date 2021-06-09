@@ -168,7 +168,7 @@ function Nabar(props) {
                     onClick={handleClick}
                   >
                     <AccountCircleIcon className={classes.root} />
-                    <span className={classes.icon_button}>{loginUser.fullName}</span>
+                    <span className={classes.icon_button}>{loginUser.first_name}</span>
                   </IconButton>
                 </>
               )}
@@ -190,7 +190,7 @@ function Nabar(props) {
                 )}
                 <span className="hidden-on-mobile-table">Gio hang</span>
               </div>
-              {cartClick ? <Cart carts={carts} /> : null}
+              {cartClick ? <Cart carts={carts} onclickClose={() => setCartClick(false)} /> : null}
             </div>
             {closeForm ? <Modal /> : null}
           </div>

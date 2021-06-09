@@ -115,6 +115,13 @@ const productStyle = {
   pullRight: {
     float: 'right',
   },
+  viewCart: {
+    float: 'right',
+    marginRight: '20px'
+  },
+  linkCart: {
+    color: 'white',
+  },
   cardCategory: {
     textAlign: 'center',
     marginTop: '10px',
@@ -191,7 +198,12 @@ const productStyle = {
   },
   span: {
     fontSize: 13,
-  }
+  },
+  slider: {
+    margin: '2vh 0 0',
+    padding: '20px 40px'
+  },
+
 };
 
 export default productStyle;

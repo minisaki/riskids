@@ -8,6 +8,7 @@
 /* aside */
 .category_aside {
   background-color: var(--white-color);
+  height: 100%;
 }
 .category_aside-wrapper {
   /* height: 260px; */
@@ -30,7 +31,7 @@
   background-color: var(--white-color);
   font-size: 1.4rem;
   font-weight: 500;
-  padding: 15px 10px;
+  padding: 14px 10px;
   margin: 0;
   border-bottom: 1px solid rgba(169, 169, 169, 0.3);
 }
@@ -52,3 +53,15 @@
   background-color: rgb(252,252,252);
   color: rgb(169, 169, 169);
 }
+.categori_slider {
+  width: 100%;
+}
+.container__title-wrapper-cate {
+  background-color: aliceblue;
+}
+.sticky {
+  position: fixed;
+  top: calc(var(--header-with-search--height) + 50px);
+  z-index: 10;
+}
+

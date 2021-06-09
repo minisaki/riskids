@@ -24,8 +24,12 @@ const useStyles = makeStyles({
 
 function RegisterForm(props) {
   const schema = yup.object().shape({
-    textEmail: yup.string().required('Vui lòng nhập trường này!').email('Vui lòng nhập dúng Email'),
-    textPassword: yup.string().min(8, 'Tối thiểu 8 kí tự').required('Vui lòng nhập trường này!'),
+    // đăng nhập bằng email
+    // textEmail: yup.string().required('Vui lòng nhập trường này!').email('Vui lòng nhập dúng Email'),
+    
+    // đăng nhập bằng userName
+    textEmail: yup.string().required('Vui lòng nhập trường này!'),
+    textPassword: yup.string().min(6, 'Tối thiểu 8 kí tự').required('Vui lòng nhập trường này!'),
     
   });
 
@@ -67,7 +71,7 @@ function RegisterForm(props) {
         <i className="fas fa-times icon-close" onClick={handleCloseForm}></i>
       </div>
       <div className="auth__input">
-        <InputField name="textEmail" label="Email" labelWidth={40} form={form}></InputField>
+        <InputField name="textEmail" label="Tên Đăng Nhập" labelWidth={110} form={form}></InputField>
         <PasswordField
           name="textPassword"
           label="Mật Khẩu"
